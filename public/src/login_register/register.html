@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/Style_css/register.css">
+    <title>Form Login</title>
+    
+</head>
+<body>
+    <div id="header">
+        <div class="menu">
+            <div class="logo">
+                <img src="/image/logo.png" height="50px" ; alt="">
+            </div>
+            <a href="/home.html">Trang Chủ</a>
+            <a href="/src/Views/Contact.html">Hỗ Trợ</a>
+            <a href="/src/Views/Product.html">Sản Phẩm</a>
+            <a href="/src/Views/Dowload.html">Dowload</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="left-section">
+            <h2>Hãy Đưa Tiền Cho Chúng Tôi, Tôi sẽ biến ước mơ của bạn thành sự thật =))</h2>
+            <img src="/image/roket.png" alt="Rocket Icon">
+        </div>
+        <div class="right-section">
+            <form class="login">
+                <p>Sign Up</p>
+                <label for="username_login">Full Name</label>
+                <input type="text" id="username_create" placeholder="Enter your full name">
+
+                <label for="password_login">Password</label>
+                <input type="password" id="password_create" placeholder="Enter your password">
+
+                <label for="password_login">Password again</label>
+                <input type="password" id="password_create_again" placeholder="Enter your password">
+
+                <label for="email_login">E-Mail</label>
+                <input type="text" id="email_create" placeholder="Enter your e-mail address">
+
+                <div class="terms">
+                    <input type="checkbox" id="terms_check">
+                    <label for="terms_check">By signing up you agree <a href="#">Terms & Conditions</a></label>
+                </div>
+            </form>
+            <div class="register_new">
+                <input type="submit" id="submit" value="Đăng Kí">
+                <div class="switch">Bạn đã có tài khoản? <a href="/src/login_register/login.html" onclick="switchForm()">Đăng Nhập</a>
+            </div>
+        </div>
+    </div>
+    <div id="successMessage" class="overlay">
+        <div id="messageBox" class="success">
+            <button class="closeBtn" data-target="successMessage">Oke</button>
+            <p>🎉 Đăng nhập thành công!<br>Đang Chuyển Hướng tới trang đăng nhập!!!</p>
+        </div>
+    </div>
+
+    <!-- Thông báo lỗi -->
+    <div id="errorMessage" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorMessage">Oke</button>
+            <p>❌ Vui Lòng nhập đầy đủ thông tin đăng nhập.</p>
+        </div>
+    </div>
+
+    <!-- Thông báo lỗi hệ thống -->
+    <div id="errorSystem" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorSystem">Oke</button>
+            <p>🚫 Lỗi hệ thống. Vui lòng thử lại sau!</p>
+        </div>
+    </div>
+    <div id="errorEmail" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorEmail">Oke</button>
+            <p>🚫 Email Đang bị trùng với tài khoản khác<br>Hãy kiểm tra lại email của bạn.</p>
+        </div>
+    </div>
+    <div id="errorPassword" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorPassword">Oke</button>
+            <p>🚫 Password phải đủ 6 chữ số!!!!</p>
+        </div>
+    </div>
+    <div id="password2" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="password2">Oke</button>
+            <p>🚫 Mật Khẩu Không Khớp!!<br>Vui Lòng Nhập Lại!!!</p>
+        </div>
+    </div>
+    <div id="checkbox" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="checkbox">Oke</button>
+            <p>Hãy Đồng ý với điều khoản dịch vụ của chúng tôi.</p>
+        </div>
+    </div>
+    <script src="/script_login/register.js"></script>
+</body>
+</html>
