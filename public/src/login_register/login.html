@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" rel="noopener" target="_blank" href="/Style_css/login.css">
+    <link rel="stylesheet" href="/Style_css/login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Form Login</title>
 
 </head>
@@ -22,63 +23,125 @@
         </div>
     </div>
     <div class="container">
-        <div class="left-section">
-            <h2>Hãy Đưa Tiền Cho Chúng Tôi, Tôi sẽ biến ước mơ của bạn thành sự thật =))</h2>
-            <img src="/image/roket.png" alt="Rocket Icon">
-        </div>
-        <div class="right-section">
-            <form class="login">
-                <p>Sign in</p>
-                <label for="username_login">Full Name</label>
-                <input type="text" id="username_login" placeholder="Enter your full name">
-
-                <label for="password_login">Password</label>
-                <input type="password" id="password_login" placeholder="Enter your password">
-
-                <div class="terms">
-                    <input type="checkbox" id="terms_check">
-                    <label for="terms_check">By signing up you agree <a href="#">Terms & Conditions</a></label>
+        <div class="form-box login">
+            <form action="#!">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="text"id="username_login"  placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password_login" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <div class="forgot-link">
+                    <a href="#!">Forgot Password?</a>
+                </div>
+                <button type="submit" id="submit-login" class="btn">Login</button>
+                <p>or login with socail platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google' ></i></a>
+                    <a href="#"><i class='bx bxl-facebook' ></i></a>
+                    <a href="#"><i class='bx bxl-github' ></i></a>
+                    <a href="#"><i class='bx bxl-linkedin' ></i></a>
                 </div>
             </form>
-            <div class="register_new">
-                <input type="submit" id="submit" value="Đăng Nhập">
-                <div class="switch">Bạn chưa có tài khoản có tài khoản? <a href="/src/login_register/register.html"
-                        onclick="switchForm()">Đăng kí</a>
+        </div>
+
+        <div class="form-box register">
+            <form action="#!">
+                <h1>Registration</h1>
+                <div class="input-box">
+                    <input type="text" id="username_create" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
                 </div>
-            </div>
-        </div>
-        <!-- Thông báo thành công -->
-        <div id="successMessage" class="overlay">
-            <div id="messageBox" class="success">
-                <button class="closeBtn" data-target="successMessage">Oke</button>
-                <p>🎉 Đăng nhập thành công!</p>
-            </div>
-        </div>
-
-        <!-- Thông báo lỗi -->
-        <div id="errorMessage" class="overlay">
-            <div id="messageBox" class="error">
-                <button class="closeBtn" data-target="errorMessage">Oke</button>
-                <p>❌ Tài khoản hoặc mật khẩu không chính xác!</p>
-            </div>
-        </div>
-
-        <!-- Thông báo lỗi hệ thống -->
-        <div id="errorSystem" class="overlay">
-            <div id="messageBox" class="error">
-                <button class="closeBtn" data-target="errorSystem">Oke</button>
-                <p>🚫 Lỗi hệ thống. Vui lòng thử lại sau!</p>
-            </div>
-        </div>
-        <!-- tích vào đồng ý với điều khoản -->
-        <div id="checkbox" class="overlay">
-            <div id="messageBox" class="error">
-                <button class="closeBtn" data-target="checkbox">Oke</button>
-                <p>Hãy Đồng ý với điều khoản dịch vụ của chúng tôi.</p>
-            </div>
+                <div class="input-box">
+                    <input type="email" id="email_create" placeholder="Email" required>
+                    <i class='bx bxs-envelope' ></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password_create" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password_create_again" placeholder="Password again" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+                <button type="submit"id = "submit-register" class="btn">Register</button>
+                <p>or register with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google' ></i></a>
+                    <a href="#"><i class='bx bxl-facebook' ></i></a>
+                    <a href="#"><i class='bx bxl-github' ></i></a>
+                    <a href="#"><i class='bx bxl-linkedin' ></i></a>
+                </div>
+            </form>
         </div>
 
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Hello, Welcome</h1>
+                <p>Don't have an accuont</p>
+                <button class="btn register-btn">Register</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>Welcome Back</h1>
+                <p>Already have an account</p>
+                <button class="btn login-btn">Login</button>
+            </div>
+        </div>
+    </div>
+    <div id="successMessage-login" class="overlay">
+        <div id="messageBox" class="success">
+            <button class="closeBtn" data-target="successMessage-login">Oke</button>
+            <p>🎉 Đăng nhập thành công!</p>
+        </div>
+    </div>
+    <div id="successMessage-register" class="overlay">
+        <div id="messageBox" class="success">
+            <button class="closeBtn" data-target="successMessage-register">Oke</button>
+            <p>🎉 Đăng kí thành công!<br>Đang Chuyển Hướng tới trang web chính!!!</p>
+        </div>
+    </div>
+
+    <!-- Thông báo lỗi -->
+    <div id="errorMessage" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorMessage">Oke</button>
+            <p>❌ Vui Lòng nhập đầy đủ thông tin đăng nhập.</p>
+        </div>
+    </div>
+
+    <!-- Thông báo lỗi hệ thống -->
+    <div id="errorSystem" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorSystem">Oke</button>
+            <p>🚫 Lỗi hệ thống. Vui lòng thử lại sau!</p>
+        </div>
+    </div>
+    <div id="errorEmail" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorEmail">Oke</button>
+            <p>🚫 Email Đang bị trùng với tài khoản khác<br>Hãy kiểm tra lại email của bạn.</p>
+        </div>
+    </div>
+    <div id="errorPassword" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="errorPassword">Oke</button>
+            <p>🚫 Password phải đủ 6 chữ số!!!!</p>
+        </div>
+    </div>
+    <div id="password2" class="overlay">
+        <div id="messageBox" class="error">
+            <button class="closeBtn" data-target="password2">Oke</button>
+            <p>🚫 Mật Khẩu Không Khớp!!<br>Vui Lòng Nhập Lại!!!</p>
+        </div>
+    </div>
+
+        <script src="main.js"></script>
         <script src="/script_login/login.js"></script>
+
 
 </body>
 

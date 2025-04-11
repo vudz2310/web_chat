@@ -18,28 +18,23 @@ function showMessage(id) {
       const targetId = this.getAttribute("data-target");
       hideMessage(targetId);
   
-      if (targetId === "successMessage") {
-        window.location.href = "/src/login_success/index.html";
+      if (targetId === "successMessage-register") {
+        window.location.href = "/src/login_register/login.html";
       }
     });
   });
-document.getElementById("submit").addEventListener("click", async function (e) {
+document.getElementById("submit-register").addEventListener("click", async function (e) {
     e.preventDefault();
 
     const username = document.getElementById("username_create").value.trim();
     const email = document.getElementById("email_create").value.trim();
     const password = document.getElementById("password_create").value.trim();
     const confirmPassword = document.getElementById("password_create_again").value.trim();
-    const check = document.getElementById("terms_check").checked;
 
-    if (!username || !email || !password || !confirmPassword|| !check) {
-        if (!check) {
-            showMessage("checkbox"); // Hiển thị lỗi chưa tick vào checkbox
-          } else {
-            showMessage("errorMessage"); // Hiển thị lỗi điền thiếu thông tin
-          }
-          return;
-        }
+    if (!username || !email || !password || !confirmPassword) {
+      showMessage("errorMessage");
+      return;
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -65,8 +60,8 @@ document.getElementById("submit").addEventListener("click", async function (e) {
 
         const result = await response.json();
         if (response.ok) {
-            showMessage("successMessage");
-            window.location.href = "/src/Login_register/login.html";
+            showMessage("successMessage-register");
+            
         } else {
             showMessage("errorEmail"); // Thông báo lỗi từ server
         }
