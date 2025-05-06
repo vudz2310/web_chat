@@ -17,11 +17,12 @@ const server = http.createServer(app);
 // ✅ Khởi tạo socket.io sau khi có server
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3001", // hoặc http://localhost:3000 nếu frontend chạy port khác
+        origin: process.env.CORS_ORIGIN || "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
     }
 });
+
 
 const corsOptions = {
     origin: process.env.CORS_ORIGIN || "http://localhost:3000", // dùng biến môi trường
