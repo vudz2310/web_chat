@@ -15,12 +15,11 @@ const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
 
 // ✅ CORS cấu hình 1 lần duy nhất
-const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true
-};
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  methods: ["GET","POST"],
+  credentials: true
+}));
 
 // ✅ Khởi tạo socket.io
 const io = new Server(server, {
