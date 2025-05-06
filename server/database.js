@@ -1,16 +1,15 @@
 require("dotenv").config();
 const mysql = require("mysql2");
-
-// Cấu hình MySQL
-const db = mysql.createConnection({
-    host: process.env.DB_HOST || "127.0.0.1",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "vudz2310",
-    database: process.env.DB_NAME || "login",
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
+module.exports = connection;
 
 // Kết nối MySQL
-db.connect((err) => {
+connection.connect((err) => {
     if (err) {
         console.error("❌ Lỗi kết nối MySQL:", err.message);
         process.exit(1);
@@ -18,4 +17,4 @@ db.connect((err) => {
     console.log("✅ Kết nối MySQL thành công!");
 });
 
-module.exports = db;
+module.exports = connection;
