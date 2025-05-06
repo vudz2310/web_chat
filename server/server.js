@@ -23,6 +23,15 @@ const io = new Server(server, {
     }
 });
 
+const corsOptions = {
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000", // dùng biến môi trường
+    methods: ["GET", "POST"],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
+
+
 // ✅ Kết nối MySQL
 db.connect((err) => {
     if (err) {
