@@ -44,7 +44,7 @@ document.getElementById("submit-login").addEventListener("click", async function
   }
   
   try {
-    const response = await fetch("https://web-chat-fhf6.onrender.com/api/login", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
