@@ -14,24 +14,18 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
 
-// ✅ Khởi tạo socket.io sau khi có server
-const io = new Server(server, {
-    cors: {
-        origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
-
-
+// ✅ CORS cấu hình 1 lần duy nhất
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000", // dùng biến môi trường
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true
 };
-
 app.use(cors(corsOptions));
 
+// ✅ Khởi tạo socket.io
+const io = new Server(server, {
+    cors: corsOptions
+});
 
 // ✅ Kết nối MySQL
 db.connect((err) => {
@@ -42,18 +36,11 @@ db.connect((err) => {
     console.log("✅ Kết nối MySQL thành công!");
 });
 
-// ✅ Cấu hình CORS
-app.use(cors({
-    origin: "http://localhost:3001", // sửa nếu cần
-    methods: ["GET", "POST"],
-    credentials: true
-}));
-
-// ✅ Đọc JSON và dữ liệu form
+// ✅ Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Lưu session vào MySQL
+// ✅ Cấu hình session
 const sessionStore = new MySQLStore({}, db);
 const sessionMiddleware = session({
     secret: "supersecret",
@@ -64,11 +51,9 @@ const sessionMiddleware = session({
 });
 
 app.use(sessionMiddleware);
+io.engine.use(sessionMiddleware); // Cho socket.io dùng session
 
-// ✅ Cho socket.io dùng chung session
-io.engine.use(sessionMiddleware);
-
-// ✅ Gắn static files (frontend) — phải **trước** các route
+// ✅ Gắn static files (frontend)
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // ✅ Route mặc định
@@ -76,9 +61,15 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public", "home.html"));
 });
 
-// ✅ Import router có sử dụng `io`
+// ✅ API router có dùng io
 const apiRoutes = require("./api")(io);
 app.use("/api", apiRoutes);
+
+// ✅ Socket.IO event (ví dụ)
+io.on("connection", (socket) => {
+    console.log("🟢 Socket connected:", socket.id);
+    // thêm logic ở đây nếu cần
+});
 
 // ✅ Khởi động server
 server.listen(PORT, "0.0.0.0", () => {
