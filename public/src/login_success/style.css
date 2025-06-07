@@ -136,6 +136,11 @@ nav a:focus {
     display: flex;
     flex-direction: column;
 }
+.time{
+    font-size: 8px;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
 
 .message {
     padding: 12px 15px;
