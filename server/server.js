@@ -1,77 +1,85 @@
 require("dotenv").config();
+
 const express = require("express");
-const bodyParser = require("body-parser");
-const mysql = require("mysql2");
 const path = require("path");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const db = require("./database");
+const db = require("./database"); // đảm bảo đây là connection mysql2 đã tạo
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
 
-// ✅ CORS cấu hình 1 lần duy nhất
+// Cấu hình session store MySQL
+const sessionStore = new MySQLStore({}, db);
+
+// Cấu hình session middleware
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET || "supersecret",
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: { secure: false, httpOnly: true, sameSite: "lax" },
+});
+
+// CORS options
 const corsOptions = {
-     origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-     methods: ["GET", "POST"],
-     credentials: true
- };
- app.use(cors(corsOptions));
+  origin: process.env.CORS_ORIGIN || "http://localhost:3001",
+  methods: ["GET", "POST"],
+  credentials: true,
+};
 
-// ✅ Khởi tạo socket.io
-const io = new Server(server, {
-    cors: corsOptions
-});
-
-// ✅ Kết nối MySQL
-db.connect((err) => {
-    if (err) {
-        console.error("❌ Không thể kết nối MySQL:", err.message);
-        process.exit(1);
-    }
-    console.log("✅ Kết nối MySQL thành công!");
-});
-
-// ✅ Middleware
+// Middleware
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// ✅ Cấu hình session
-const sessionStore = new MySQLStore({}, db);
-const sessionMiddleware = session({
-    secret: "supersecret",
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: { secure: false, httpOnly: true, sameSite: "lax" }
-});
-
 app.use(sessionMiddleware);
-io.engine.use(sessionMiddleware); // Cho socket.io dùng session
 
-// ✅ Gắn static files (frontend)
+// Static files
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// ✅ Route mặc định
+// Routes
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "public", "home.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "home.html"));
 });
 
-// ✅ API router có dùng io
+// Initialize socket.io with cors options
+const io = new Server(server, {
+  cors: corsOptions,
+});
+
+// Allow socket.io to use express-session middleware
+io.engine.use(sessionMiddleware);
+
+// API routes with io passed
 const apiRoutes = require("./api")(io);
 app.use("/api", apiRoutes);
 
-// ✅ Socket.IO event (ví dụ)
+// MySQL connection test
+db.connect((err) => {
+    if (err) {
+      console.error("❌ Không thể kết nối MySQL:", err.message);
+      process.exit(1);
+    }
+    console.log("✅ Kết nối MySQL thành công!");
+  });
+
+// Socket.io event example
 io.on("connection", (socket) => {
-    console.log("🟢 Socket connected:", socket.id);
-    // thêm logic ở đây nếu cần
+  console.log("🟢 Socket connected:", socket.id);
+
+  // Bạn có thể thêm sự kiện socket ở đây
+
+  socket.on("disconnect", () => {
+    console.log("🔌 Socket disconnected:", socket.id);
+  });
 });
 
-// ✅ Khởi động server
+// Start server
 server.listen(PORT, "0.0.0.0", () => {
-    console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
+  console.log(`✅ Server đang chạy tại http://localhost:${PORT}`);
 });

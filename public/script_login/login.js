@@ -1,3 +1,4 @@
+// Hiển thị thông báo
 function showMessage(id) {
   const el = document.getElementById(id);
   if (el) {
@@ -11,18 +12,19 @@ function showMessage(id) {
 function hideMessage(id) {
   const el = document.getElementById(id);
   if (el) {
-      el.style.display = "none";
+    el.style.display = "none";
   } else {
-      console.warn(`Phần tử với ID "${id}" không tồn tại.`);
+    console.warn(`Phần tử với ID "${id}" không tồn tại.`);
   }
 }
 
-// Gắn sự kiện đóng cho tất cả nút đóng (chung)
+// Gắn sự kiện đóng cho tất cả các nút đóng
 document.querySelectorAll(".closeBtn").forEach(btn => {
   btn.addEventListener("click", function () {
     const targetId = this.getAttribute("data-target");
     hideMessage(targetId);
 
+    // Điều hướng sau khi đăng nhập thành công
     if (targetId === "successMessage-login") {
       window.location.href = "/src/login_success/index.html";
     }
@@ -34,15 +36,13 @@ document.getElementById("submit-login").addEventListener("click", async function
   e.preventDefault();
 
   const username = document.getElementById("username_login").value.trim();
-  const email = document.getElementById("username_login").value.trim();
   const password = document.getElementById("password_login").value.trim();
 
-
-  if (!username || !email || !password) {
-    showMessage("errorMessage"); // Hiển thị lỗi điền thiếu thông tin
+  if (!username || !password) {
+    showMessage("errorMessage"); // Thiếu thông tin
     return;
   }
-  
+
   try {
     const response = await fetch("/api/login", {
       method: "POST",
@@ -50,18 +50,19 @@ document.getElementById("submit-login").addEventListener("click", async function
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ username, password }),
-      credentials: "include"
+      credentials: "include" // Cho phép cookie session
     });
 
     const result = await response.json();
 
-    if (response.ok) {
+    if (response.ok && result.success) {
       showMessage("successMessage-login");
     } else {
-      showMessage("errorMessage"); // Thông báo sai tài khoản/mật khẩu
+      console.warn("Đăng nhập thất bại:", result.message);
+      showMessage("errorMessage");
     }
   } catch (error) {
-    console.error("Lỗi khi đăng nhập:", error);
-    showMessage("errorSystem"); // Lỗi server hoặc kết nối
+    console.error("❌ Lỗi khi gọi API đăng nhập:", error);
+    showMessage("errorSystem");
   }
 });

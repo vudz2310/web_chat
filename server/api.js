@@ -21,7 +21,7 @@ module.exports = function (io) {
             return res.status(400).json({ message: "Tên đăng nhập và mật khẩu không được để trống." });
         }
 
-        db.query("SELECT * FROM register WHERE username = ?", [username], (err, results) => {
+        db.query("SELECT * FROM login WHERE username = ?", [username], (err, results) => {
             if (err) return res.status(500).json({ message: "Lỗi hệ thống." });
 
             const user = results[0];

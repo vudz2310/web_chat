@@ -2,7 +2,6 @@ const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 const mysql = require("mysql2");
-
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -10,10 +9,11 @@ const PORT = 3002;
 
 // ✅ Kết nối MySQL
 const db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "vudz2310",
-    database: "login",
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
 });
 
 db.connect((err) => {
