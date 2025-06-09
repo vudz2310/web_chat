@@ -9,22 +9,26 @@ const http = require("http");
 const { Server } = require("socket.io");
 const mysql = require("mysql2");
 
-// Kết nối MySQL
-const db = mysql.createConnection({
+// --- Tạo connection pool để quản lý kết nối MySQL ---
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-// Kiểm tra kết nối MySQL
-db.connect((err) => {
+// Kiểm tra kết nối
+pool.getConnection((err, connection) => {
   if (err) {
     console.error("❌ Không thể kết nối MySQL:", err.message);
     process.exit(1);
   }
-  console.log("✅ Kết nối MySQL thành công!");
+  console.log("✅ Kết nối MySQL thành công (pool)!");
+  if (connection) connection.release();
 });
 
 const app = express();
@@ -37,8 +41,8 @@ const io = new Server(server, {
   },
 });
 
-// Session store MySQL
-const sessionStore = new MySQLStore({}, db);
+// Cấu hình session store với connection pool
+const sessionStore = new MySQLStore({}, pool.promise());
 
 // Middleware session
 const sessionMiddleware = session({
@@ -47,7 +51,7 @@ const sessionMiddleware = session({
   saveUninitialized: false,
   store: sessionStore,
   cookie: {
-    secure: false, // đổi thành true nếu dùng HTTPS
+    secure: false, // true nếu dùng HTTPS
     httpOnly: true,
     sameSite: "lax",
   },
@@ -62,10 +66,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 
-// Static files (frontend)
+// Static files
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// Route cơ bản
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "login.html"));
 });
@@ -76,7 +79,6 @@ io.engine.use(sessionMiddleware);
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);
 
-  // socket event demo
   socket.on("chat-message", (msg) => {
     console.log("📨 Message:", msg);
     io.emit("chat-message", msg);
@@ -87,7 +89,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Import route API nếu có (ví dụ /api/login/register)
+// Import API routes (nếu có)
 try {
   const apiRoutes = require("./api")(io);
   app.use("/api", apiRoutes);
